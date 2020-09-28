@@ -56,31 +56,44 @@
       }
 
       .left_right_panel{
-        position: absolute;
+        position: relative;
         top:150px;
       }
       .left_control{
-        position: relative;
+        position: absolute;
         left:10px;
         cursor: pointer;
       }
       .right_control{
-        position: relative;
-        left:505px;
+        position: absolute;
+        left:550px;
         cursor: pointer;
       }
     </style>
     <script src = "jquery-3.5.1.min.js"></script> 
     <script>
+      var s;
+      var sw = false;
+      var index;
+
         $(document).ready(()=>{
+       
           $('.slider_text').css('left',-400); // 텍스트 처음에 안보이게 보내버리기 
-          let index=0; //index 부모로부터 받음
+          index=0; //index 부모로부터 받음
           moveSlider(index); //0 받은 함수 호출 ..//따로 메서드로 만든 이유 !!  
-          
+          autoMove();
+
+          $('.animation_canvas').hover(function(){
+            clearInterval(s);
+          }, function(){
+            autoMove();
+          })
+
           $('.control_button').click(function(){
             index = $(this).index();
             moveSlider(index);// control button 의 index 
           })
+
           $('.left_control').click(function(){
             if(index>0){
             index--;
@@ -89,6 +102,7 @@
               alert('dead end');
             }
             })
+
           $('.right_control').click(function(){
              if(index<4){
              index++;
@@ -110,8 +124,45 @@
             $('.slider_text').stop().eq(index).animate({
               left:0
             },500)
-           
-         }
+          
+            if(index==0){
+                $('.left_control').fadeOut(700);
+                $('.right_control').fadeIn(700);
+              } else if(index==4){
+                $('.left_control').fadeIn(700);
+                $('.right_control').fadeOut(700)
+              } else {
+                $('.left_control').fadeIn(700);
+                $('.right_control').fadeIn(700)      
+              }
+  //처음일 때 왼쪽 화살표 없어지고 마지막일때 오른쪽 화살표 없어짐 (내 방법 페이드인은 못했음)
+                //if(index==0){
+//               $('.left_control').css('display','none');
+//             }else if(index==4){
+//               $('.right_control').css('display','none');
+//             }else {
+//               $('.left_control').css('display','block').fadeIn(); --> 기술 자체가 잘못된 것 같다. 
+//               $('.right_control').css('display','block').fadeIn();
+//             }
+        
+        }
+        function autoMove(){
+          
+          s = setInterval(function(){
+            if(index < 4 && sw == false){
+            $('.right_control').trigger('click');
+          } else {
+            sw = true;
+          }
+          if(index > 0 && sw == true){
+            $('.left_control').trigger('click');
+          } else {
+            sw = false;
+          }
+          },3000);
+        
+        }
+       
     </script>
 </head>
 <body>
