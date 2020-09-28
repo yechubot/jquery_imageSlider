@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 슬라이더</title>
+    <link rel = "stylesheet" type = "text/css" href = "../css/jquery-ui.min.css">
+    <style>
+      .animation_canvas {
+        position: relative;
+        width:600px;
+        height:400px;
+        overflow: hidden; /* --> 이미지 하나만 보이게 옆으로 이동하면서 슬라이드 효과*/ 
+      }
+      .slider_panel{
+       width:3000px;/*이미지 5개*/
+       position: relative;
+      }
+      .slider_image{
+        width:600px;
+        height:400px;
+        float:left;
+      }
+      .slider_text_panel{
+        position: absolute; /*부모가 animation_canvas, 부모에서 절대적 위치 가짐..*/
+        top:200px;
+        left:50px;
+
+      }
+      .slider_text {
+        position: absolute;
+        width:300px; 
+        height:150px;
+        color:yellow;
+      }
+      .control_panel{
+        position: absolute;
+        top:380px;
+        left:270px;
+        height:13px;
+        overflow: hidden;
+      }
+      .control_button{
+        background-image: url(../images/point_button.png);
+        float: left;
+        cursor: pointer;
+        width:12px;
+        height:46px;
+        position: relative;
+      }
+      .control_button:hover{
+        top:-16px;
+      }
+      .control_button.active { /*class 이름 둘 다 갖고있는 거 , click 시 add class with js*/
+        top:-31px;
+      }
+
+      .left_right_panel{
+        position: absolute;
+        top:150px;
+      }
+      .left_control{
+        position: relative;
+        left:10px;
+        cursor: pointer;
+      }
+      .right_control{
+        position: relative;
+        left:505px;
+        cursor: pointer;
+      }
+    </style>
+    <script src = "jquery-3.5.1.min.js"></script> 
+    <script>
+        $(document).ready(()=>{
+          $('.slider_text').css('left',-400); // 텍스트 처음에 안보이게 보내버리기 
+          let index=0; //index 부모로부터 받음
+          moveSlider(index); //0 받은 함수 호출 ..//따로 메서드로 만든 이유 !!  
+          
+          $('.control_button').click(function(){
+            index = $(this).index();
+            moveSlider(index);// control button 의 index 
+          })
+          $('.left_control').click(function(){
+            if(index>0){
+            index--;
+            moveSlider(index);
+            } else {
+              alert('dead end');
+            }
+            })
+          $('.right_control').click(function(){
+             if(index<4){
+             index++;
+             moveSlider(index);
+             }else {
+               alert('dead end');
+             }
+          })
+        })
+          //첫 사진 클릭 전에도 파란색이 되게 만들기
+         function moveSlider(index){ // paramter의 index
+           // 선언함수 -> 호출하지 않으면 수행하지 않는다.
+          $('.slider_panel').animate({
+              left:-(index*600)// paramter로 받은 index 
+            },500);
+            $('.control_button').removeClass('active');// 몇번째 눌렀는지 모르니까 처음부터 제거
+            $('.slider_text').css('left',-400); // 일단 다 밖으로 보내버리기
+            $('.control_button').eq(index).addClass('active'); // active라는 class 가지게 됨 
+            $('.slider_text').stop().eq(index).animate({
+              left:0
+            },500)
+           
+         }
+    </script>
+</head>
+<body>
+  <div class="animation_canvas">
+    <div class="slider_panel">
+      <img src="../images/Chrysanthemum.jpg" alt="국화" class="slider_image"/>
+      <img src="../images/Desert.jpg" alt="사막" class="slider_image">
+      <img src="../images/Penguins.jpg" alt="펭귄" class="slider_image">
+      <img src="../images/Jellyfish.jpg" alt="해파리"class="slider_image">
+      <img src="../images/Koala.jpg" alt="코알라" class="slider_image">
+    </div>
+    <div class="slider_text_panel"><!--설명 안 쓸때는 이 div를 빼면 된다.-->
+      <div class="slider_text">
+        <h1>Chrysanthemum</h1>
+        <p>국화는 국화과에 속하는 여러해살이풀 가운데 하나이다. 관상용으로 가꾸는 경우가 있으며, 가지가 많이 갈라지고 잎은 어긋나 있으며 독특한 냄새가 난다. 가을에 노란색, 자주색, 흰색 등의 꽃이 피며, 모양과 색깔이 다양한 여러 품종이 있다.</p>
+      </div>
+      <div class="slider_text">
+        <h1>Desert</h1>
+        <p>사막은 강수량이 적은 지역이다. 사막은 크게 표면 구성 물질에 따라 암석 사막, 모래사막, 자갈사막으로 나뉜다. 일반적으로 연평균 강수량이 250mm 이하인 지역을 사막이라 정의한다. 사막은 식물이 살기에는 매우 열악하며, 드물기는 하지만 식물이 전혀 살 수 없는 곳도 있다</p>
+      </div>
+      <div class="slider_text">
+        <h1>Penguins</h1>
+        <p>펭귄은 펭귄목 펭귄과에 속하는 날지 못하는 새의 총칭이다. 남극, 남아메리카, 남아프리카, 오스트레일리아와 뉴질랜드, 그리고 적도 부근의 갈라파고스 제도에 분포한다. 모두 남반구에 속한다.</p>
+      </div>
+        <div class="slider_text">
+        <h1>Jellyfish</h1>
+        <p>해파리는 해파리아문에 속하는 무척추동물의 총칭이다. 해파리는 콩보다 작은 것부터 지름이 2m 이상에 이르기까지 종류가 다양한데, 네 개의 목과 약 200 여종이 여기에 속한다. 전 세계 대양에서 발견된다. 성체 몸의 94~98%는 물로 이루어져 있다</p>
+      </div>
+        <div class="slider_text">
+        <h1>Koala</h1>
+        <p>호주 동부에 서식하는 오스트레일리아 유대상목 쌍절치목 코알라과에 속하는 동물이다.</p>
+      </div>
+    </div>
+      <div class="control_panel">
+      <div class="control_button"></div>
+      <div class="control_button"></div>
+      <div class="control_button"></div>
+      <div class="control_button"></div>
+      <div class="control_button"></div>
+    </div>
+    <div class="left_right_panel">  
+      <img src="../images/arrow_pre.png" alt="left" class="left_control"/>
+      <img src="../images/arrow_next.png" alt="right" class="right_control"/>
+    </div>
+  </div>
+  
+</body>
+</html>
